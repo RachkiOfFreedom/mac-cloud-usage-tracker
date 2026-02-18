@@ -24,33 +24,33 @@ const parseIsoDate = (isoValue: string): string => {
   const [, year, month, day, hour, minute, second] = match;
   
   // Validate date component ranges
-  const y = parseInt(year!, 10);
-  const m = parseInt(month!, 10);
-  const d = parseInt(day!, 10);
-  const h = parseInt(hour!, 10);
-  const min = parseInt(minute!, 10);
-  const sec = parseInt(second!, 10);
+  const yearNum = parseInt(year!, 10);
+  const monthNum = parseInt(month!, 10);
+  const dayNum = parseInt(day!, 10);
+  const hourNum = parseInt(hour!, 10);
+  const minuteNum = parseInt(minute!, 10);
+  const secondNum = parseInt(second!, 10);
   
   // Check basic ranges
-  if (m < 1 || m > 12) {
+  if (monthNum < 1 || monthNum > 12) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
-  if (d < 1 || d > 31) {
+  if (dayNum < 1 || dayNum > 31) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
-  if (h < 0 || h > 23) {
+  if (hourNum < 0 || hourNum > 23) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
-  if (min < 0 || min > 59) {
+  if (minuteNum < 0 || minuteNum > 59) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
-  if (sec < 0 || sec > 59) {
+  if (secondNum < 0 || secondNum > 59) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
   
   // Validate day is valid for the given month/year
-  const daysInMonth = new Date(y, m, 0).getDate();
-  if (d > daysInMonth) {
+  const daysInMonth = new Date(yearNum, monthNum, 0).getDate();
+  if (dayNum > daysInMonth) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
 
