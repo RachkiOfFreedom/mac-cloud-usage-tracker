@@ -13,10 +13,52 @@ const isSupportedInstanceFamily = (value: string): value is InstanceFamily =>
   SUPPORTED_INSTANCE_FAMILIES.has(value as InstanceFamily);
 
 const parseIsoDate = (isoValue: string): string => {
+  // Strict ISO 8601 validation with timezone requirement
+  const iso8601Regex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,3}))?(Z|[+-]\d{2}:\d{2})$/;
+  
+  const match = isoValue.match(iso8601Regex);
+  if (!match) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+
+  const [, year, month, day, hour, minute, second] = match;
+  
+  // Validate date component ranges
+  const y = parseInt(year!, 10);
+  const m = parseInt(month!, 10);
+  const d = parseInt(day!, 10);
+  const h = parseInt(hour!, 10);
+  const min = parseInt(minute!, 10);
+  const sec = parseInt(second!, 10);
+  
+  // Check basic ranges
+  if (m < 1 || m > 12) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+  if (d < 1 || d > 31) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+  if (h < 0 || h > 23) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+  if (min < 0 || min > 59) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+  if (sec < 0 || sec > 59) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+  
+  // Validate day is valid for the given month/year
+  const daysInMonth = new Date(y, m, 0).getDate();
+  if (d > daysInMonth) {
+    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
+  }
+
   const parsed = Date.parse(isoValue);
   if (Number.isNaN(parsed)) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
   }
+
   return new Date(parsed).toISOString();
 };
 

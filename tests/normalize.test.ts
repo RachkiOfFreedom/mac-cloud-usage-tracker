@@ -80,4 +80,86 @@ describe("normalizeUsageRecord", () => {
       })
     ).toThrow("Invalid startIso timestamp");
   });
+
+  it("rejects malformed dates that would be silently coerced", () => {
+    // February 30th doesn't exist
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-02-30T00:00:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+
+    // February 29th in non-leap year
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-02-29T00:00:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+
+    // April only has 30 days
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-04-31T00:00:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+
+    // Month 13 doesn't exist
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-13-01T00:00:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+
+    // Day 0 is invalid
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-01-00T00:00:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+  });
+
+  it("accepts leap year February 29th", () => {
+    const normalized = normalizeUsageRecord({
+      accountId: "acct",
+      instanceFamily: "mac1.metal",
+      region: "us-west-2",
+      usageMinutes: 1,
+      startIso: "2024-02-29T00:00:00Z"
+    });
+
+    expect(normalized.startIso).toBe("2024-02-29T00:00:00.000Z");
+  });
+
+  it("requires timezone information", () => {
+    // Missing timezone should be rejected
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-01-15T00:00:00"
+      })
+    ).toThrow("Invalid startIso timestamp");
+  });
 });
