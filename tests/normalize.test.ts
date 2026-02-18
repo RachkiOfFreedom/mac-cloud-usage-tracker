@@ -69,6 +69,19 @@ describe("normalizeUsageRecord", () => {
     ).toThrow("usageMinutes must be >= 0");
   });
 
+
+  it("rejects timestamps without explicit timezones", () => {
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-01-01T10:00:00"
+      })
+    ).toThrow("startIso must include an explicit timezone offset");
+  });
+
   it("rejects invalid timestamps", () => {
     expect(() =>
       normalizeUsageRecord({
@@ -76,7 +89,7 @@ describe("normalizeUsageRecord", () => {
         instanceFamily: "mac1.metal",
         region: "us-west-2",
         usageMinutes: 1,
-        startIso: "not-a-date"
+        startIso: "2025-99-99T10:00:00Z"
       })
     ).toThrow("Invalid startIso timestamp");
   });

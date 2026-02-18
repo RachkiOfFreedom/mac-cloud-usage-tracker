@@ -8,11 +8,16 @@ const SUPPORTED_INSTANCE_FAMILIES: ReadonlySet<InstanceFamily> = new Set([
 
 const MINUTES_PER_HOUR = 60;
 const ROUNDING_PRECISION = 1000;
+const ISO_TIMEZONE_SUFFIX = /(Z|[+-]\d{2}:\d{2})$/;
 
 const isSupportedInstanceFamily = (value: string): value is InstanceFamily =>
   SUPPORTED_INSTANCE_FAMILIES.has(value as InstanceFamily);
 
 const parseIsoDate = (isoValue: string): string => {
+  if (!ISO_TIMEZONE_SUFFIX.test(isoValue)) {
+    throw new Error(`startIso must include an explicit timezone offset: ${isoValue}`);
+  }
+
   const parsed = Date.parse(isoValue);
   if (Number.isNaN(parsed)) {
     throw new Error(`Invalid startIso timestamp: ${isoValue}`);
