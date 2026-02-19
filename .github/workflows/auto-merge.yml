@@ -1,4 +1,7 @@
 name: Auto-merge
+# Prerequisites: branch protection on `main` must have
+#   "Require status checks to pass before merging" enabled,
+#   with the "build-and-test" check (from ci.yml) listed as required.
 
 on:
   pull_request:
@@ -20,5 +23,5 @@ jobs:
       - name: Enable auto-merge
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          pull-request-number: ${{ github.event.pull_request.number }}
+          pull-request-number: ${{ github.event.pull_request.number || github.event.review.pull_request.number }}
           merge-method: squash

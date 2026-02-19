@@ -1,9 +1,13 @@
 # Copilot Coding Instructions
 
 ## Stack
+
+The intended stack for this project is:
 - TypeScript (strict mode), Node.js 20+
 - Vitest for testing
 - No runtime dependencies unless explicitly approved
+
+> If the repository does not yet have a `package.json` or `tsconfig.json`, establish these before applying the standards below.
 
 ## Code Standards
 - Types/interfaces are the source of truth — define them first
