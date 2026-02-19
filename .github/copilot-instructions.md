@@ -1,0 +1,22 @@
+# Copilot Coding Instructions
+
+## Stack
+- TypeScript (strict mode), Node.js 20+
+- Vitest for testing
+- No runtime dependencies unless explicitly approved
+
+## Code Standards
+- Types/interfaces are the source of truth — define them first
+- No `any` types. Use `unknown` + type guards where needed
+- Functions must validate inputs at the boundary, trust types internally
+- Round numbers deterministically — never rely on floating point equality
+
+## PR Standards
+- One concern per PR. If a change touches >3 files, split it
+- PR title must follow conventional commits: `feat:`, `fix:`, `ci:`, `refactor:`, `test:`, `docs:`
+- PR body must have: Motivation, Description, Testing sections
+
+## Testing
+- Test core business logic and edge cases
+- Do not test trivial getters/setters or type-only code
+- All tests must be deterministic — no Date.now(), no Math.random() without seeding
