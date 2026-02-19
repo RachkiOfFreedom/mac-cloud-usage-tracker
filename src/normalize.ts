@@ -12,16 +12,17 @@ const ROUNDING_PRECISION = 1000;
 const isSupportedInstanceFamily = (value: string): value is InstanceFamily =>
   SUPPORTED_INSTANCE_FAMILIES.has(value as InstanceFamily);
 
+// Hoisted to module-level to avoid recompilation on every parseIsoDate call.
+// Requires mandatory timezone (Z or ±HH:MM where HH 00-14, MM 00-59).
+// Fractional seconds accept any digit count to allow microsecond/nanosecond precision.
+const ISO_8601_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(Z|([+-])(0\d|1[0-4]):([0-5]\d))$/;
+
 const parseIsoDate = (isoValue: string, fieldName = "startIso"): string => {
   const invalid = (): never => {
     throw new Error(`Invalid ${fieldName} timestamp: ${isoValue}`);
   };
 
-  // Strict ISO 8601 validation with mandatory timezone (Z or ±HH:MM where HH 00-14, MM 00-59).
-  // Fractional seconds accept any number of digits so microsecond/nanosecond precision is not rejected.
-  const iso8601Regex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(Z|([+-])(0\d|1[0-4]):([0-5]\d))$/;
-
-  const match = isoValue.match(iso8601Regex);
+  const match = isoValue.match(ISO_8601_REGEX);
   if (!match) invalid();
 
   const [, year, month, day, hour, minute, second] = match!;
