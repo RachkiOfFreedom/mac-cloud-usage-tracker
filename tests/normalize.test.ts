@@ -162,4 +162,91 @@ describe("normalizeUsageRecord", () => {
       })
     ).toThrow("Invalid startIso timestamp");
   });
+
+  it("rejects out-of-range time components", () => {
+    // Hour 24 is invalid
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-01-01T24:00:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+
+    // Minute 60 is invalid
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-01-01T23:60:00Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+
+    // Second 60 is invalid
+    expect(() =>
+      normalizeUsageRecord({
+        accountId: "acct",
+        instanceFamily: "mac1.metal",
+        region: "us-west-2",
+        usageMinutes: 1,
+        startIso: "2025-01-01T23:59:60Z"
+      })
+    ).toThrow("Invalid startIso timestamp");
+  });
+
+  it("accepts maximum valid time components", () => {
+    const normalized = normalizeUsageRecord({
+      accountId: "acct",
+      instanceFamily: "mac1.metal",
+      region: "us-west-2",
+      usageMinutes: 1,
+      startIso: "2025-01-01T23:59:59Z"
+    });
+
+    expect(normalized.startIso).toBe("2025-01-01T23:59:59.000Z");
+  });
+
+  it("accepts positive timezone offsets", () => {
+    const normalized = normalizeUsageRecord({
+      accountId: "acct",
+      instanceFamily: "mac1.metal",
+      region: "us-west-2",
+      usageMinutes: 1,
+      startIso: "2025-01-15T10:00:00+05:30"
+    });
+
+    expect(normalized.startIso).toBe("2025-01-15T04:30:00.000Z");
+  });
+
+  it("accepts timestamps with milliseconds", () => {
+    const normalized = normalizeUsageRecord({
+      accountId: "acct",
+      instanceFamily: "mac1.metal",
+      region: "us-west-2",
+      usageMinutes: 1,
+      startIso: "2025-01-15T10:00:00.123Z"
+    });
+
+    expect(normalized.startIso).toBe("2025-01-15T10:00:00.123Z");
+  });
+
+  it("rejects invalid timezone offsets", () => {
+    const invalidOffsets = ["+25:00", "-25:00", "+99:99"];
+
+    for (const offset of invalidOffsets) {
+      expect(() =>
+        normalizeUsageRecord({
+          accountId: "acct",
+          instanceFamily: "mac1.metal",
+          region: "us-west-2",
+          usageMinutes: 1,
+          startIso: `2025-01-15T00:00:00${offset}`
+        })
+      ).toThrow("Invalid startIso timestamp");
+    }
+  });
 });
