@@ -14,7 +14,9 @@
 ## PR Standards
 - One concern per PR. If a change touches >3 files, split it
 - PR title must follow conventional commits: `feat:`, `fix:`, `ci:`, `refactor:`, `test:`, `docs:`
-- PR body must have: Motivation, Description, Testing sections
+- PR body must clearly cover three areas: **Motivation** (why), **Description** (what/how), and **Testing** (how it was verified).
+  - Prefer markdown sections named `Motivation`, `Description`, and `Testing`
+  - Equivalent headings (e.g., `Why`, `What changed`, `New files`, `How was this tested?`) are acceptable as long as all three areas are present
 
 ## Testing
 - Test core business logic and edge cases
