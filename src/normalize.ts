@@ -17,8 +17,9 @@ const parseIsoDate = (isoValue: string, fieldName = "startIso"): string => {
     throw new Error(`Invalid ${fieldName} timestamp: ${isoValue}`);
   };
 
-  // Strict ISO 8601 validation with mandatory timezone (Z or ±HH:MM where HH 00-14, MM 00-59)
-  const iso8601Regex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,3}))?(Z|([+-])(0\d|1[0-4]):([0-5]\d))$/;
+  // Strict ISO 8601 validation with mandatory timezone (Z or ±HH:MM where HH 00-14, MM 00-59).
+  // Fractional seconds accept any number of digits so microsecond/nanosecond precision is not rejected.
+  const iso8601Regex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(Z|([+-])(0\d|1[0-4]):([0-5]\d))$/;
 
   const match = isoValue.match(iso8601Regex);
   if (!match) invalid();

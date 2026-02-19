@@ -234,6 +234,20 @@ describe("normalizeUsageRecord", () => {
     expect(normalized.startIso).toBe("2025-01-15T10:00:00.123Z");
   });
 
+  it("accepts timestamps with sub-millisecond precision", () => {
+    // Microseconds (6 digits) and nanoseconds (9 digits) are valid ISO 8601 and should not be rejected.
+    // Date.parse truncates to milliseconds, which is acceptable.
+    const normalized = normalizeUsageRecord({
+      accountId: "acct",
+      instanceFamily: "mac1.metal",
+      region: "us-west-2",
+      usageMinutes: 1,
+      startIso: "2025-01-15T10:00:00.123456Z"
+    });
+
+    expect(normalized.startIso).toBe("2025-01-15T10:00:00.123Z");
+  });
+
   it("rejects invalid timezone offsets", () => {
     const invalidOffsets = ["+25:00", "-25:00", "+99:99"];
 
