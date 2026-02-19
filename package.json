@@ -1,0 +1,15 @@
+{
+  "name": "mac-cloud-usage-tracker",
+  "version": "0.1.0",
+  "description": "Tracks cloud service usage on macOS",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7"
+  }
+}
