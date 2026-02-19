@@ -12,11 +12,43 @@ const ROUNDING_PRECISION = 1000;
 const isSupportedInstanceFamily = (value: string): value is InstanceFamily =>
   SUPPORTED_INSTANCE_FAMILIES.has(value as InstanceFamily);
 
-const parseIsoDate = (isoValue: string): string => {
+// Hoisted to module-level to avoid recompilation on every parseIsoDate call.
+// Requires mandatory timezone (Z or ±HH:MM where HH 00-14, MM 00-59).
+// Fractional seconds accept any digit count to allow microsecond/nanosecond precision.
+const ISO_8601_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(Z|([+-])(0\d|1[0-4]):([0-5]\d))$/;
+
+const parseIsoDate = (isoValue: string, fieldName = "startIso"): string => {
+  const invalid = (): never => {
+    throw new Error(`Invalid ${fieldName} timestamp: ${isoValue}`);
+  };
+
+  const match = isoValue.match(ISO_8601_REGEX);
+  if (!match) invalid();
+
+  const [, year, month, day, hour, minute, second] = match!;
+
+  // Validate date component ranges
+  const yearNum = parseInt(year!, 10);
+  const monthNum = parseInt(month!, 10);
+  const dayNum = parseInt(day!, 10);
+  const hourNum = parseInt(hour!, 10);
+  const minuteNum = parseInt(minute!, 10);
+  const secondNum = parseInt(second!, 10);
+
+  // Check basic ranges
+  if (monthNum < 1 || monthNum > 12) invalid();
+  if (dayNum < 1 || dayNum > 31) invalid();
+  if (hourNum < 0 || hourNum > 23) invalid();
+  if (minuteNum < 0 || minuteNum > 59) invalid();
+  if (secondNum < 0 || secondNum > 59) invalid();
+
+  // Validate day is valid for the given month/year
+  const daysInMonth = new Date(yearNum, monthNum, 0).getDate();
+  if (dayNum > daysInMonth) invalid();
+
   const parsed = Date.parse(isoValue);
-  if (Number.isNaN(parsed)) {
-    throw new Error(`Invalid startIso timestamp: ${isoValue}`);
-  }
+  if (Number.isNaN(parsed)) invalid();
+
   return new Date(parsed).toISOString();
 };
 
