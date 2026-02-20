@@ -8,7 +8,7 @@ Focus review on:
 4. **Error handling**: Ensure errors are typed and messages are actionable
 5. **Test quality**: Tests must assert behavior, not implementation details
 6. **PR scope**: Flag PRs that mix concerns or touch more than 3 files without justification
-7. **Conventional commits**: PR title must start with feat:, fix:, ci:, refactor:, test:, or docs:
+7. **Conventional commits**: PR title must start with feat:, fix:, ci:, refactor:, test:, docs:, or chore:
 8. **Input validation**: All public-facing functions must validate inputs at the boundary
 9. **Floating-point arithmetic**: Flag direct equality checks on floats; require deterministic rounding
 10. **No runtime dependencies**: Flag any new dependency additions — must be explicitly approved
