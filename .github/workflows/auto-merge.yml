@@ -19,7 +19,7 @@ jobs:
     if: (github.event_name == 'pull_request' || github.event_name == 'pull_request_review') && github.event.pull_request.draft == false && contains('["OWNER","MEMBER","COLLABORATOR"]', github.event.pull_request.author_association) && github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Enable auto-merge
-        uses: peter-evans/enable-pull-request-automerge@v3
+        uses: peter-evans/enable-pull-request-automerge@5c88c56f32ef59a110c51c4a21a75b2211bcaf47 # v3
         with:
           pull-request-number: ${{ github.event.pull_request.number || github.event.review.pull_request.number }}
           merge-method: squash
