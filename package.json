@@ -1,0 +1,35 @@
+{
+  "name": "mac-cloud-usage-tracker",
+  "version": "0.1.0",
+  "description": "Tracks cloud service usage on macOS",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "author": "RachkiOfFreedom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RachkiOfFreedom/mac-cloud-usage-tracker.git"
+  },
+  "keywords": [
+    "macos",
+    "cloud",
+    "usage",
+    "tracker"
+  ],
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7"
+  }
+}
