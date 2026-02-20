@@ -34,7 +34,7 @@ jobs:
           contains(github.event.issue.body || '', '@claude') ||
           contains(github.event.issue.title || '', '@claude')
         ) &&
-        contains('["OWNER","MEMBER","COLLABORATOR"]', github.event.issue.author_association)
+        contains('["OWNER","MEMBER","COLLABORATOR"]', github.event.sender.author_association)
       )
     runs-on: ubuntu-latest
     permissions:
