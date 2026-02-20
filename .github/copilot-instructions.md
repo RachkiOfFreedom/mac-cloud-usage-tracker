@@ -24,8 +24,10 @@ This is a TypeScript (ESM, NodeNext) repository that tracks cloud service usage 
 
 - Use **TypeScript ESM** with `NodeNext` module resolution.
 - Always use `.js` file extensions in import specifiers inside `.ts` files (e.g., `import { foo } from './bar.js'`).
-- Prefer strong typing; avoid `any` unless strictly necessary and localized.
+- Types/interfaces are the source of truth — define them first.
+- No `any` types. Use `unknown` + type guards where needed.
 - Keep functions small and cohesive with minimal public API surface.
+- Round numbers deterministically — never rely on floating point equality.
 
 ### Error Handling
 
@@ -37,6 +39,7 @@ This is a TypeScript (ESM, NodeNext) repository that tracks cloud service usage 
 - Write tests with **Vitest**; keep them deterministic (control time, randomness, and I/O).
 - Assert on behavior and public contracts, not implementation internals.
 - Cover critical paths and edge cases (null, empty, out-of-range values).
+- Do not test trivial getters/setters or type-only code.
 
 ### Dependencies
 
@@ -48,3 +51,4 @@ This is a TypeScript (ESM, NodeNext) repository that tracks cloud service usage 
 - PR titles must follow **Conventional Commits**: `feat:`, `fix:`, `ci:`, `refactor:`, `test:`, or `docs:`.
 - One concern per PR; touch **no more than 3 files** unless the task inherently requires more.
 - Every PR with new functionality must include corresponding tests.
+- PR body must clearly cover three areas: **Motivation** (why), **Description** (what/how), and **Testing** (how it was verified).
