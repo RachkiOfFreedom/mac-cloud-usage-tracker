@@ -48,7 +48,7 @@ This is a TypeScript (ESM, NodeNext) repository that tracks cloud service usage 
 
 ## Pull Request Conventions
 
-- PR titles must follow **Conventional Commits**: `feat:`, `fix:`, `ci:`, `refactor:`, `test:`, or `docs:`.
+- PR titles must follow **Conventional Commits**: `feat:`, `fix:`, `ci:`, `refactor:`, `test:`, `docs:`, or `chore:`.
 - One concern per PR; touch **no more than 3 files** unless the task inherently requires more.
 - Every PR with new functionality must include corresponding tests.
 - PR body must clearly cover three areas: **Motivation** (why), **Description** (what/how), and **Testing** (how it was verified).
