@@ -1,0 +1,25 @@
+name: Auto-merge
+# Prerequisites: branch protection on `main` must have
+#   "Require status checks to pass before merging" enabled,
+#   with the "build-and-test" check (from ci.yml) listed as required.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'pull_request' || github.event_name == 'pull_request_review') && github.event.pull_request.draft == false && contains('["OWNER","MEMBER","COLLABORATOR"]', github.event.pull_request.author_association) && github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Enable auto-merge
+        uses: peter-evans/enable-pull-request-automerge@5c88c56f32ef59a110c51c4a21a75b2211bcaf47 # v3
+        with:
+          pull-request-number: ${{ github.event.pull_request.number || github.event.review.pull_request.number }}
+          merge-method: squash
