@@ -15,7 +15,7 @@ const isSupportedInstanceFamily = (value: string): value is InstanceFamily =>
 
 const parseIsoDate = (isoValue: string): string => {
   if (!ISO_TIMEZONE_SUFFIX.test(isoValue)) {
-    throw new Error(`startIso must include an explicit timezone offset: ${isoValue}`);
+    throw new Error(`startIso must include an explicit timezone (Z or ±HH:MM): ${isoValue}`);
   }
 
   const parsed = Date.parse(isoValue);
